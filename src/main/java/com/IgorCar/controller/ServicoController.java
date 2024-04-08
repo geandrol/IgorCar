@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.IgorCar.entity.Servico;
 import com.IgorCar.repository.ServicoRepository;
+import com.IgorCar.service.ServicoService;
 
 @RestController
 @RequestMapping("/servico")
@@ -24,6 +25,9 @@ public class ServicoController {
 
 	@Autowired
 	private ServicoRepository repository;
+	
+	@Autowired
+	private ServicoService service;
 	
 	@GetMapping
 	public ResponseEntity<List<Servico>> get() {
@@ -41,7 +45,9 @@ public class ServicoController {
 	
 	@PostMapping
 	public ResponseEntity<Servico> post(@RequestBody Servico servico) {
-		return ResponseEntity.status(HttpStatus.CREATED).body(repository.save(servico));
+		return ResponseEntity
+				.status(HttpStatus.CREATED)
+				.body(service.cadastrarServico(servico));
 	}
 
 	@PutMapping
@@ -53,6 +59,5 @@ public class ServicoController {
 	public ResponseEntity<?> delete (@PathVariable long id) {
 		repository.deleteById(id);
 		return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-		
 	}
 }

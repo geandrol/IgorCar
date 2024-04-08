@@ -1,14 +1,25 @@
 package com.IgorCar.entity;
 
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
+import org.hibernate.annotations.UpdateTimestamp;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
 @Entity
 @Table(name = "tb_servico")
@@ -18,23 +29,35 @@ public class Servico {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
+	@NotBlank(message = "O Atributo título é Obrigatório!") // Exclusivo para String
+	@Size(min = 2, max = 100, message = "O atributo título deve ter no minimo 05 e no máximo 100 caracteres")
 	private String descricao;
 	
+	@ManyToOne
+	@JsonIgnoreProperties("servicos")
 	private Cliente cliente;
 	
+	@ManyToOne
+	@JsonIgnoreProperties("cliente")
 	private Carro carro;
 	
-	private List<Produto> produtos;
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "servico", cascade = CascadeType.REMOVE)
+	@JsonIgnoreProperties({"produto", "servico"})
+	private List<ProdutoServico> produtos;
 	
+    //Cadastrado via service
 	private BigDecimal vlrTotalProdutos;
 	
+	@Min(value = 0, message = "O valor não pode ser menor do que 0")
 	private BigDecimal vlrTotalMaoDeObra;
 	
+	//Cadastrado via service
 	private BigDecimal vlrTotal;
 	
-	private Date dataServico;
+	@UpdateTimestamp
+	private LocalDate data;
 	
-	private Date fimGarantia;
+	private LocalDate fimGarantia;
 
 	public Long getId() {
 		return id;
@@ -68,11 +91,11 @@ public class Servico {
 		this.carro = carro;
 	}
 
-	public List<Produto> getProdutos() {
+	public List<ProdutoServico> getProdutos() {
 		return produtos;
 	}
 
-	public void setProdutos(List<Produto> produtos) {
+	public void setProdutos(List<ProdutoServico> produtos) {
 		this.produtos = produtos;
 	}
 
@@ -100,19 +123,20 @@ public class Servico {
 		this.vlrTotal = vlrTotal;
 	}
 
-	public Date getDataServico() {
-		return dataServico;
+	public LocalDate getData() {
+		return data;
 	}
 
-	public void setDataServico(Date dataServico) {
-		this.dataServico = dataServico;
+	public void setData(LocalDate data) {
+		this.data = data;
 	}
 
-	public Date getFimGarantia() {
+	public LocalDate getFimGarantia() {
 		return fimGarantia;
 	}
 
-	public void setFimGarantia(Date fimGarantia) {
+	public void setFimGarantia(LocalDate fimGarantia) {
 		this.fimGarantia = fimGarantia;
 	}
+
 }
