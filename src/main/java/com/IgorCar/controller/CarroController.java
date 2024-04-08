@@ -15,38 +15,38 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.IgorCar.entity.Cliente;
-import com.IgorCar.repository.ClienteRepository;
+import com.IgorCar.entity.Carro;
+import com.IgorCar.repository.CarroRepository;
 
 @RestController
-@RequestMapping("/cliente")
-public class ClienteController {
+@RequestMapping("/carro")
+public class CarroController {
 
 	@Autowired
-	private ClienteRepository repository;
+	private CarroRepository repository;
 	
 	@GetMapping
-	public ResponseEntity<List<Cliente>> get() {
+	public ResponseEntity<List<Carro>> get() {
 		return ResponseEntity.ok(repository.findAll());
 	}
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<Cliente> getById(@PathVariable long id) {
-		Optional<Cliente> clienteExist = repository.findById(id);
+	public ResponseEntity<Carro> getById(@PathVariable long id) {
+		Optional<Carro> carroExist = repository.findById(id);
 		
-		if (clienteExist.isEmpty())
+		if (carroExist.isEmpty())
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-		return ResponseEntity.ok(clienteExist.get());
+		return ResponseEntity.ok(carroExist.get());
 	}
 	
 	@PostMapping
-	public ResponseEntity<Cliente> post(@RequestBody Cliente cliente) {
-		return ResponseEntity.status(HttpStatus.CREATED).body(repository.save(cliente));
+	public ResponseEntity<Carro> post(@RequestBody Carro carro) {
+		return ResponseEntity.status(HttpStatus.CREATED).body(repository.save(carro));
 	}
 
 	@PutMapping
-	public ResponseEntity<Cliente> put (@RequestBody Cliente cliente) {
-		return ResponseEntity.status(HttpStatus.OK).body(repository.save(cliente));
+	public ResponseEntity<Carro> put (@RequestBody Carro carro) {
+		return ResponseEntity.status(HttpStatus.OK).body(repository.save(carro));
 	}
 	
 	@DeleteMapping("/{id}")

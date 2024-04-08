@@ -50,7 +50,7 @@ public class ProdutoController {
 	}
 	
 	@DeleteMapping("/{id}")
-	public ResponseEntity<?> course (@PathVariable long id) {
+	public ResponseEntity<?> delete (@PathVariable long id) {
 		repository.deleteById(id);
 		return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
 		
