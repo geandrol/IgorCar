@@ -15,38 +15,38 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.IgorCar.entity.Produto;
-import com.IgorCar.repository.ProdutoRepository;
+import com.IgorCar.entity.Cliente;
+import com.IgorCar.repository.ClienteRepository;
 
 @RestController
-@RequestMapping("/produto")
-public class ProdutoController {
+@RequestMapping("/cliente")
+public class ClienteController {
 
 	@Autowired
-	private ProdutoRepository repository;
+	private ClienteRepository repository;
 	
 	@GetMapping
-	public ResponseEntity<List<Produto>> get() {
+	public ResponseEntity<List<Cliente>> get() {
 		return ResponseEntity.ok(repository.findAll());
 	}
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<Produto> getById(@PathVariable long id) {
-		Optional<Produto> produtoExist = repository.findById(id);
+	public ResponseEntity<Cliente> getById(@PathVariable long id) {
+		Optional<Cliente> clienteExist = repository.findById(id);
 		
-		if (produtoExist.isEmpty())
+		if (clienteExist.isEmpty())
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-		return ResponseEntity.ok(produtoExist.get());
+		return ResponseEntity.ok(clienteExist.get());
 	}
 	
 	@PostMapping
-	public ResponseEntity<Produto> post(@RequestBody Produto produto) {
-		return ResponseEntity.status(HttpStatus.CREATED).body(repository.save(produto));
+	public ResponseEntity<Cliente> post(@RequestBody Cliente cliente) {
+		return ResponseEntity.status(HttpStatus.CREATED).body(repository.save(cliente));
 	}
 
 	@PutMapping
-	public ResponseEntity<Produto> put (@RequestBody Produto produto) {
-		return ResponseEntity.status(HttpStatus.OK).body(repository.save(produto));
+	public ResponseEntity<Cliente> put (@RequestBody Cliente cliente) {
+		return ResponseEntity.status(HttpStatus.OK).body(repository.save(cliente));
 	}
 	
 	@DeleteMapping("/{id}")

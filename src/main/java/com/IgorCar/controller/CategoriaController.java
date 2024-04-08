@@ -15,38 +15,38 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.IgorCar.entity.Produto;
-import com.IgorCar.repository.ProdutoRepository;
+import com.IgorCar.entity.Categoria;
+import com.IgorCar.repository.CategoriaRepository;
 
 @RestController
-@RequestMapping("/produto")
-public class ProdutoController {
+@RequestMapping("/categoria")
+public class CategoriaController {
 
 	@Autowired
-	private ProdutoRepository repository;
+	private CategoriaRepository repository;
 	
 	@GetMapping
-	public ResponseEntity<List<Produto>> get() {
+	public ResponseEntity<List<Categoria>> get() {
 		return ResponseEntity.ok(repository.findAll());
 	}
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<Produto> getById(@PathVariable long id) {
-		Optional<Produto> produtoExist = repository.findById(id);
+	public ResponseEntity<Categoria> getById(@PathVariable long id) {
+		Optional<Categoria> categoriaExist = repository.findById(id);
 		
-		if (produtoExist.isEmpty())
+		if (categoriaExist.isEmpty())
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-		return ResponseEntity.ok(produtoExist.get());
+		return ResponseEntity.ok(categoriaExist.get());
 	}
 	
 	@PostMapping
-	public ResponseEntity<Produto> post(@RequestBody Produto produto) {
-		return ResponseEntity.status(HttpStatus.CREATED).body(repository.save(produto));
+	public ResponseEntity<Categoria> post(@RequestBody Categoria categoria) {
+		return ResponseEntity.status(HttpStatus.CREATED).body(repository.save(categoria));
 	}
 
 	@PutMapping
-	public ResponseEntity<Produto> put (@RequestBody Produto produto) {
-		return ResponseEntity.status(HttpStatus.OK).body(repository.save(produto));
+	public ResponseEntity<Categoria> put (@RequestBody Categoria categoria) {
+		return ResponseEntity.status(HttpStatus.OK).body(repository.save(categoria));
 	}
 	
 	@DeleteMapping("/{id}")
