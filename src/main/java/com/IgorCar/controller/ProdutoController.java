@@ -26,7 +26,7 @@ public class ProdutoController {
 	
 	@GetMapping
 	public ResponseEntity<List<Produto>> get() {
-		return ResponseEntity.ok(Repository.findAll());
+		return ResponseEntity.ok(repository.findAll());
 	}
 	
 	@GetMapping("/{id}")
