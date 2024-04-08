@@ -30,7 +30,7 @@ public class ProdutoController {
 	}
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<Produto> getById(@PathVariable int id) {
+	public ResponseEntity<Produto> getById(@PathVariable long id) {
 		Optional<Produto> produtoExist = repository.findById(id);
 		
 		if (produtoExist.isEmpty())
@@ -49,7 +49,7 @@ public class ProdutoController {
 	}
 	
 	@DeleteMapping("/{id}")
-	public ResponseEntity<?> course (@PathVariable int id) {
+	public ResponseEntity<?> course (@PathVariable long id) {
 		repository.deleteById(id);
 		return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
 		
