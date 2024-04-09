@@ -3,7 +3,9 @@ package com.IgorCar.service;
 import java.math.BigDecimal;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.IgorCar.Dto.ProdutoServicoDTO;
 import com.IgorCar.Dto.ServicoDTO;
@@ -28,6 +30,9 @@ public class ServicoService {
 	@Autowired
 	private ProdutoRepository produtoRepository;
 	
+	@Autowired
+	private ProdutoService prodService;
+	
 	public Servico cadastrarServico(ServicoDTO servicoDto) {
 		
 		Double sumVlrProd = 0d;
@@ -40,7 +45,10 @@ public class ServicoService {
 			
 			sumVlrProd += Double.parseDouble(produtoBanco.getValorVendal().toString());
 			
-			System.out.println(sumVlrProd);
+			if(produtoBanco.getQuantidade() == 0)
+				throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Não há este produto em estoque");
+			
+			prodService.changeQtdProduto(produtoBanco.getId(), (produtoBanco.getQuantidade() - 1));
 		}
 		
 		servico.setDescricao(servicoDto.getDescricao());
