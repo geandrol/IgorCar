@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.IgorCar.Dto.ServicoDTO;
 import com.IgorCar.entity.Servico;
 import com.IgorCar.repository.ServicoRepository;
 import com.IgorCar.service.ServicoService;
@@ -44,7 +45,7 @@ public class ServicoController {
 	}
 	
 	@PostMapping
-	public ResponseEntity<Servico> post(@RequestBody Servico servico) {
+	public ResponseEntity<Servico> post(@RequestBody ServicoDTO servico) {
 		return ResponseEntity
 				.status(HttpStatus.CREATED)
 				.body(service.cadastrarServico(servico));

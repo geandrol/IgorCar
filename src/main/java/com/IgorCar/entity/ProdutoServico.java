@@ -18,7 +18,7 @@ public class ProdutoServico {
 	private Long id;
 	
 	@ManyToOne
-	@JsonIgnoreProperties("produtos")
+	@JsonIgnoreProperties("categoria")
 	private Produto produto;
 	
 	@ManyToOne

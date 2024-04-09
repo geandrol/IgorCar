@@ -24,7 +24,7 @@ public class Categoria {
 	private Long id;
 	
 	@NotBlank(message = "O Atributo título é Obrigatório!") // Exclusivo para String
-	@Size(min = 5, max = 100, message = "O atributo título deve ter no minimo 05 e no máximo 100 caracteres")
+	@Size(min = 1, max = 100, message = "O atributo título deve ter no minimo 05 e no máximo 100 caracteres")
 	private String descricao;
 	
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "categoria", cascade = CascadeType.REMOVE)

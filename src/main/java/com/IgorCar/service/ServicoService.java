@@ -5,8 +5,14 @@ import java.math.BigDecimal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.IgorCar.Dto.ProdutoServicoDTO;
+import com.IgorCar.Dto.ServicoDTO;
+import com.IgorCar.entity.Carro;
+import com.IgorCar.entity.Cliente;
+import com.IgorCar.entity.Produto;
 import com.IgorCar.entity.ProdutoServico;
 import com.IgorCar.entity.Servico;
+import com.IgorCar.repository.ProdutoRepository;
 import com.IgorCar.repository.ProdutoServicoRepository;
 import com.IgorCar.repository.ServicoRepository;
 
@@ -19,26 +25,56 @@ public class ServicoService {
 	@Autowired
 	private ProdutoServicoRepository prodServicoRepository;
 	
-	public Servico cadastrarServico(Servico servico) {
+	@Autowired
+	private ProdutoRepository produtoRepository;
+	
+	public Servico cadastrarServico(ServicoDTO servicoDto) {
 		
-		BigDecimal sumVlrProd = new BigDecimal(0);
+		Double sumVlrProd = 0d;
+		Servico servico = new Servico();
 		
-		for (ProdutoServico prod : servico.getProdutos()) {
-			sumVlrProd.add(prod.getProduto().getValorVendal());
+		for (ProdutoServicoDTO prod : servicoDto.getProdutos()) {
+			
+			Produto produtoBanco = produtoRepository
+					.findById(prod.getIdProduto()).get();
+			
+			sumVlrProd += Double.parseDouble(produtoBanco.getValorVendal().toString());
+			
+			System.out.println(sumVlrProd);
 		}
 		
-		servico.setVlrTotalProdutos(sumVlrProd);
-		servico.setVlrTotal(sumVlrProd.add(servico.getVlrTotalMaoDeObra()));
-	
+		servico.setDescricao(servicoDto.getDescricao());
 		
+		Cliente cliente = new Cliente();
+		cliente.setId(servicoDto.getClienteId());
+		servico.setCliente(cliente);
+		
+		Carro carro = new Carro();
+		carro.setId(servicoDto.getCarroId());
+		servico.setCarro(carro);
+		
+		servico.setVlrTotalProdutos(new BigDecimal(sumVlrProd));
+		
+		BigDecimal varFinal = new BigDecimal((sumVlrProd 
+				+ Double.parseDouble(servicoDto.getVlrTotalMaoDeObra().toString())));
+		
+		servico.setVlrTotal(varFinal);
+	
+		servico.setFimGarantia(servicoDto.getFimGarantia());
+		servico.setVlrTotalMaoDeObra(servicoDto.getVlrTotalMaoDeObra());
 		//Salvar o Sevico
 		Servico servicoSalvo = servicoRepository.save(servico);
 		
 		//Salvar os ProdutosServicos
-		for (ProdutoServico prod : servico.getProdutos()) {
-			prod.getServico().setId(servicoSalvo.getId());
+		for (ProdutoServicoDTO prod : servicoDto.getProdutos()) {
+			Produto produto = new Produto();
+			produto.setId(prod.getIdProduto());
 			
-			prodServicoRepository.save(prod);
+			ProdutoServico prodServico = new ProdutoServico();
+			prodServico.setProduto(produto);
+			prodServico.setServico(servicoSalvo);
+			
+			prodServicoRepository.save(prodServico);
 		}
 		
 		return servicoRepository

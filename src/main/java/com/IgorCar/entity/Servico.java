@@ -42,7 +42,7 @@ public class Servico {
 	private Carro carro;
 	
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "servico", cascade = CascadeType.REMOVE)
-	@JsonIgnoreProperties({"produto", "servico"})
+	@JsonIgnoreProperties({"servico"})
 	private List<ProdutoServico> produtos;
 	
     //Cadastrado via service
